@@ -7,18 +7,32 @@ product = Blueprint("product", __name__)
 def add_product():
     return controllers.add_product()
 
+
 @product.route('/products', methods=['GET'])
 def get_all_products():
     return controllers.get_all_products()
+
 
 @product.route('/product/<product_id>', methods=['GET'])
 def get_product_by_id(product_id):
     return controllers.get_product_by_id(product_id)
 
-@product.route('/product/<product_id>', methods=['PUT'])
-def update_product_by_id(product_id):
-    return controllers.update_product_by_id(product_id)
 
-@product.route('/product/<product_id>', methods=['DELETE'])
-def delete_product_by_id(product_id):
-    return controllers.delete_product_by_id(product_id)
+@product.route('/product', methods=['PUT'])
+def update_product_by_id():
+    return controllers.update_product_by_id()
+
+
+@product.route('/product/delete', methods=['DELETE'])
+def delete_product():
+    return controllers.delete_product()
+
+
+@product.route('/products/active', methods=['GET'])
+def get_active_products():
+    return controllers.get_active_products()
+
+
+@product.route('/product/company/<company_id>', methods=['GET'])
+def get_products_by_company(company_id):
+    return controllers.get_products_by_company(company_id)

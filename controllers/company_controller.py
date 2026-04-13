@@ -1,3 +1,6 @@
+
+
+
 from flask import Flask, jsonify, request
 
 from db import db
@@ -35,15 +38,13 @@ def add_company():
     company = {
         "company_id": query.company_id,
         "company_name": query.company_name
-
     }
 
-    return jsonify({"message": "Company created", "result":company}), 201
+    return jsonify({"message": "Company created", "result": company}), 201
+
 
 def get_all_companies():
     query = db.session.query(Companies).all()
-
-    print(query)
 
     company_list = []
 
@@ -73,10 +74,18 @@ def get_company_by_id(company_id):
 
 
 
-def update_company_by_id(company_id):
+def update_company():
     post_data = request.form if request.form else request.get_json()
+
+    company_id = post_data.get("company_id")
+    if not company_id:
+        return jsonify({"message": "company_id is required"}), 400
+
     query = db.session.query(Companies).filter(Companies.company_id == company_id).first()
     
+    if not query:
+        return jsonify({"message": "company not found"}), 404
+
     query.company_name = post_data.get("company_name", query.company_name)
     
     try:
@@ -95,7 +104,14 @@ def update_company_by_id(company_id):
     return jsonify({"message": "company updated", "results": company}), 200
 
 
-def delete_company_by_id(company_id):
+
+def delete_company():
+    post_data = request.form if request.form else request.get_json()
+
+    company_id = post_data.get("company_id")
+    if not company_id:
+        return jsonify({"message": "company_id is required"}), 400
+
     query = db.session.query(Companies).filter(Companies.company_id == company_id).first()
 
     if not query:
@@ -108,6 +124,9 @@ def delete_company_by_id(company_id):
         db.session.rollback()
         return jsonify({"message": "unable to delete record"}), 400
 
-    return jsonify({"message": "company deleted", "result": {
-        "company_id": company_id
-    }}), 200
+    return jsonify({
+        "message": "company deleted",
+        "result": {
+            "company_id": company_id
+        }
+    }), 200

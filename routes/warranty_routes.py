@@ -7,18 +7,22 @@ warranty = Blueprint("warranty", __name__)
 def add_warranty_route():
     return controllers.add_warranty()
 
+
 @warranty.route('/warranty/<warranty_id>', methods=['GET'])
 def get_warranty_by_id_route(warranty_id):
     return controllers.get_warranty_by_id(warranty_id)
+
 
 @warranty.route('/warranties', methods=['GET'])
 def get_all_warranties_route():
     return controllers.get_all_warranties()
 
-@warranty.route('/warranty/<warranty_id>', methods=['PUT'])
-def update_warranty_by_id_route(warranty_id):
-    return controllers.update_warranty_by_id(warranty_id)
 
-@warranty.route('/warranty/<warranty_id>', methods=['DELETE'])
-def delete_warranty_route(warranty_id):
-    return controllers.delete_warranty(warranty_id)
+@warranty.route('/warranty', methods=['PUT'])
+def update_warranty_by_id_route():
+    return controllers.update_warranty_by_id()
+
+
+@warranty.route('/warranty/delete', methods=['DELETE'])
+def delete_warranty_route():
+    return controllers.delete_warranty()

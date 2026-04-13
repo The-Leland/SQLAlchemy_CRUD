@@ -79,12 +79,17 @@ def get_all_warranties():
     return jsonify({"message": "warranties found", "results": results}), 200
 
 
-def update_warranty_by_id(warranty_id):
+
+def update_warranty_by_id():
+    post_data = request.form if request.form else request.get_json()
+
+    warranty_id = post_data.get("warranty_id")
+    if not warranty_id:
+        return jsonify({"message": "warranty_id is required"}), 400
+
     warranty = db.session.query(Warranties).filter(Warranties.warranty_id == warranty_id).first()
     if not warranty:
         return jsonify({"message": "warranty not found"}), 404
-
-    post_data = request.form if request.form else request.get_json()
 
     if "warranty_months" in post_data:
         warranty.warranty_months = post_data["warranty_months"]
@@ -105,7 +110,14 @@ def update_warranty_by_id(warranty_id):
     }), 200
 
 
-def delete_warranty(warranty_id):
+
+def delete_warranty():
+    post_data = request.form if request.form else request.get_json()
+
+    warranty_id = post_data.get("warranty_id")
+    if not warranty_id:
+        return jsonify({"message": "warranty_id is required"}), 400
+
     warranty = db.session.query(Warranties).filter(Warranties.warranty_id == warranty_id).first()
     if not warranty:
         return jsonify({"message": "warranty not found"}), 404
